@@ -1,0 +1,75 @@
+#!perl
+
+# DATE
+# VERSION
+
+use 5.010;
+use strict;
+use warnings;
+
+use App::DzilUtils;
+use Perinci::CmdLine::Any -prefer_lite=>1;
+
+our %SPEC;
+$SPEC{list_dzil_bundle_contents} = {
+    v => 1.1,
+    summary => 'List plugins included in a Dist::Zilla plugin bundle',
+    args => {
+        bundle => {
+            schema => 'str*',
+            req    => 1,
+            pos    => 0,
+            completion => $App::DzilUtils::_complete_bundle,
+        },
+        short => {
+            schema => 'bool*',
+            cmdline_aliases => {s=>{}},
+        },
+    },
+};
+sub list_dzil_bundle_contents {
+    require Module::Load;
+
+    my %args = @_;
+
+    my $bundle = $args{bundle};
+    $bundle =~ s/^Dist::Zilla::PluginBundle:://;
+
+    my $module = "Dist::Zilla::PluginBundle::$bundle";
+    Module::Load::load($module);
+
+    my $obj = $module->new(name => 'bundle', payload=>{});
+    $obj->configure;
+
+    my $plugins = $obj->plugins;
+    my $res = [];
+    for (@$plugins) {
+        if ($args{short}) {
+            $_->[1] =~ s/^Dist::Zilla::Plugin:://;
+            push @$res, $_->[1];
+        } else {
+            push @$res, [$_->[0], $_->[1]];
+        }
+    }
+
+    [200, "OK", $res];
+}
+
+Perinci::CmdLine::Any->new(
+    url => '/main/list_dzil_bundle_contents',
+)->run;
+
+# ABSTRACT: List plugins included in a Dist::Zilla plugin bundle
+# PODNAME: list-dzil-bundle-contents
+
+=head1 SYNOPSIS
+
+ % list-dzil-bundle-contents Author::SHARYANTO
+
+To active bash completion:
+
+ % complete -C list-dzil-bundle-contents list-dzil-bundle-contents ; # can be put in bash startup file e.g. .bashrc
+ % list-dzil-bundle-contents author/sharya<tab>
+ % list-dzil-bundle-contents "Author::SHARYA<tab>  ; # use quote (' or ") if you want to use :: as separator
+
+=cut

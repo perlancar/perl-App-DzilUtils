@@ -1,0 +1,39 @@
+#!perl
+
+# DATE
+# VERSION
+
+use 5.010;
+use strict;
+use warnings;
+
+#use App::DzilUtils;
+use Perinci::CmdLine::Any -prefer_lite=>1;
+
+our %SPEC;
+$SPEC{list_dzil_bundles} = {
+    v => 1.1,
+    summary => 'List installed Dist::Zilla plugin bundles',
+    args => {
+    },
+};
+sub list_dzil_bundles {
+    require Module::List;
+    my %args = @_;
+    my $res = Module::List::list_modules("Dist::Zilla::PluginBundle::",
+                                         {list_modules=>1, recurse=>1});
+    [200, "OK", [map {s/^Dist::Zilla::PluginBundle:://;$_} sort keys %$res]];
+}
+
+Perinci::CmdLine::Any->new(
+    url => '/main/list_dzil_bundles',
+)->run;
+
+# ABSTRACT: List installed Dist::Zilla plugin bundles
+# PODNAME: list-dzil-bundles
+
+=head1 SYNOPSIS
+
+ % list-dzil-bundles
+
+=cut
