@@ -34,6 +34,7 @@ sub list_dzil_bundle_contents {
 
     my $bundle = $args{bundle};
     $bundle =~ s/^Dist::Zilla::PluginBundle:://;
+    $bundle =~ s!/!::!g; # convenience
 
     my $module = "Dist::Zilla::PluginBundle::$bundle";
     Module::Load::load($module);
