@@ -54,16 +54,18 @@ our $_complete_bundle = sub {
 
 This distribution provides the following command-line utilities:
 
- list-dzil-plugins
- list-dzil-bundles
  list-dzil-bundle-contents
+ list-dzil-bundles
+ list-dzil-plugin-roles
+ list-dzil-plugins
 
 Bash tab completion is available. To activate, put this in your shell script
 startup:
 
- complete -C list-dzil-plugins         list-dzil-plugins
- complete -C list-dzil-bundles         list-dzil-bundles
  complete -C list-dzil-bundle-contents list-dzil-bundle-contents
+ complete -C list-dzil-bundles         list-dzil-bundles
+ complete -C list-dzil-plugin-roles    list-dzil-plugin-roles
+ complete -C list-dzil-plugins         list-dzil-plugins
 
 Check back often, there will be more utilities added.
 

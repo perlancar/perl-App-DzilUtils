@@ -1,0 +1,72 @@
+#!perl
+
+# DATE
+# VERSION
+
+use 5.010;
+use strict;
+use warnings;
+
+use App::DzilUtils;
+use Perinci::CmdLine::Any -prefer_lite=>1;
+
+our %SPEC;
+$SPEC{list_dzil_plugin_roles} = {
+    v => 1.1,
+    summary => 'List roles included in a Dist::Zilla plugin',
+    args => {
+        plugin => {
+            schema => 'str*',
+            req    => 1,
+            pos    => 0,
+            completion => $App::DzilUtils::_complete_plugin,
+        },
+    },
+};
+sub list_dzil_plugin_roles {
+    require Module::Load;
+
+    my %args = @_;
+
+    my $plugin = $args{plugin};
+    $plugin =~ s/^Dist::Zilla::Plugin:://;
+    $plugin =~ s!/!::!g; # convenience
+
+    my $module = "Dist::Zilla::Plugin::$plugin";
+    Module::Load::load($module);
+
+    my $obj = $module->new(plugin_name => 'plugin', zilla=>bless({}, "Dist::Zilla"));
+
+    my $roles = $obj->meta->roles;
+    my $res = [];
+    for my $role (@$roles) {
+        my $name = $role->name;
+        for (split /\|/, $name) {
+            #next unless /^Dist::Zilla::Role::/;
+            next if /__ANON__/;
+            push @$res, $_;
+        }
+    }
+
+    [200, "OK", $res];
+}
+
+Perinci::CmdLine::Any->new(
+    url => '/main/list_dzil_plugin_roles',
+)->run;
+
+# ABSTRACT: List roles included in a Dist::Zilla plugin
+# PODNAME: list-dzil-plugin-roles
+
+=head1 SYNOPSIS
+
+ % list-dzil-plugin-roles MetaJSON
+
+To active bash completion:
+
+ % complete -C list-dzil-plugin-roles list-dzil-plugin-roles ; # can be put in bash startup file e.g. .bashrc
+ % list-dzil-plugin-roles meta<tab>
+ % list-dzil-plugin-roles test/<tab>   ; # use / to separate namespace
+ % list-dzil-plugin-roles "Test::<tab> ; # or :: but use quotes
+
+=cut
