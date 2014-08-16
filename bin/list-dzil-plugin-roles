@@ -62,7 +62,7 @@ Perinci::CmdLine::Any->new(
 
  % list-dzil-plugin-roles MetaJSON
 
-To active bash completion:
+To activate bash completion:
 
  % complete -C list-dzil-plugin-roles list-dzil-plugin-roles ; # can be put in bash startup file e.g. .bashrc
  % list-dzil-plugin-roles meta<tab>

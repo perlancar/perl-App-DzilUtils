@@ -67,7 +67,7 @@ Perinci::CmdLine::Any->new(
 
  % list-dzil-bundle-contents Author::SHARYANTO
 
-To active bash completion:
+To activate bash completion:
 
  % complete -C list-dzil-bundle-contents list-dzil-bundle-contents ; # can be put in bash startup file e.g. .bashrc
  % list-dzil-bundle-contents author/sharya<tab>
