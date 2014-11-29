@@ -27,7 +27,7 @@ our $_complete_plugin_or_bundle = sub {
         ($which eq 'bundle' ? 'Bundle':'').'::';
 
     {
-        completion => Complete::Module::complete_module(
+        words => Complete::Module::complete_module(
             word      => $word,
             ns_prefix => $ns_prefix,
             find_pmc  => 0,
@@ -35,7 +35,7 @@ our $_complete_plugin_or_bundle = sub {
             separator => $sep,
             ci        => 1, # convenience
         ),
-        path_sep   => $sep,
+        path_sep => $sep,
     };
 };
 
