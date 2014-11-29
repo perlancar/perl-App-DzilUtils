@@ -52,51 +52,7 @@ our $_complete_bundle = sub {
 
 =head1 SYNOPSIS
 
-This distribution provides the following command-line utilities:
-
- list-dzil-bundle-contents
- list-dzil-bundles
- list-dzil-plugin-roles
- list-dzil-plugins
-
-Bash tab completion is available. To activate, put this in your shell script
-startup:
-
- complete -C list-dzil-bundle-contents list-dzil-bundle-contents
- complete -C list-dzil-bundles         list-dzil-bundles
- complete -C list-dzil-plugin-roles    list-dzil-plugin-roles
- complete -C list-dzil-plugins         list-dzil-plugins
-
-Check back often, there will be more utilities added.
-
-
-=head1 FAQ
-
-=head2 In shell completion, why do you use / (slash) instead of :: (double colon) as it should be?
-
-If you type module name which doesn't contain any ::, / will be used as
-namespace separator. Otherwise if you already type ::, it will use ::.
-
-Colon is problematic because by default it is a word breaking character in bash.
-This means, in this command:
-
- % list-dzil-bundle-contents Author:<tab>
-
-bash is completing a new word (empty string), and in this:
-
- % list-dzil-bundle-contents Author::SHARYAN<tab>
-
-bash is completing C<SHARYAN> instead of what we want C<Author::SHARYAN>.
-
-The solution is to use quotes, e.g.
-
- % list-dzil-bundle-contents "Author::SHARYAN<tab>
- % list-dzil-bundle-contents 'Author::SHARYAN<tab>
-
-or, use /:
-
- % list-dzil-bundle-contents author/sharyan<tab>
-
-Note that most completion are made case-insensitive for convenience.
+This distribution provides several command-line utilities related to
+L<Dist::Zilla>.
 
 =cut
