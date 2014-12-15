@@ -56,7 +56,7 @@ Perinci::CmdLine::Any->new(
 )->run;
 
 # ABSTRACT: List roles included in a Dist::Zilla plugin
-# PODNAME: list-dzil-plugin-roles
+# PODNAME:
 
 =head1 SYNOPSIS
 

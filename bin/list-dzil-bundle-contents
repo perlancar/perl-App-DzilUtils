@@ -61,10 +61,10 @@ Perinci::CmdLine::Any->new(
 )->run;
 
 # ABSTRACT: List plugins included in a Dist::Zilla plugin bundle
-# PODNAME: list-dzil-bundle-contents
+# PODNAME:
 
 =head1 SYNOPSIS
 
- % list-dzil-bundle-contents Author::SHARYANTO
+ % list-dzil-bundle-contents Author::PERLANCAR
 
 =cut
