@@ -7,7 +7,7 @@ use 5.010001;
 use strict;
 use warnings;
 
-our $_complete_plugin_or_bundle = sub {
+our $_complete_stuff = sub {
     require Complete::Module;
     my $which = shift;
     my %args = @_;
@@ -23,8 +23,10 @@ our $_complete_plugin_or_bundle = sub {
     # break character in bash/readline.
     my $sep = $word =~ /::/ ? '::' : '/';
     $word =~ s/\W+/::/g;
-    my $ns_prefix    = 'Dist::Zilla::Plugin'.
-        ($which eq 'bundle' ? 'Bundle':'').'::';
+    my $ns_prefix    = 'Dist::Zilla::'.
+        ($which eq 'bundle' ? 'PluginBundle' :
+             $which eq 'plugin' ? 'Plugin' :
+                 $which eq 'role' ? 'Role' : '').'::';
 
     {
         words => Complete::Module::complete_module(
@@ -39,12 +41,16 @@ our $_complete_plugin_or_bundle = sub {
     };
 };
 
-our $_complete_plugin = sub {
-    $_complete_plugin_or_bundle->('plugin', @_);
+our $_complete_bundle = sub {
+    $_complete_stuff->('bundle', @_);
 };
 
-our $_complete_bundle = sub {
-    $_complete_plugin_or_bundle->('bundle', @_);
+our $_complete_plugin = sub {
+    $_complete_stuff->('plugin', @_);
+};
+
+our $_complete_role = sub {
+    $_complete_stuff->('role', @_);
 };
 
 1;
