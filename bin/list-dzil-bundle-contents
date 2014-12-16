@@ -60,7 +60,7 @@ Perinci::CmdLine::Any->new(
     url => '/main/list_dzil_bundle_contents',
 )->run;
 
-# ABSTRACT: List plugins included in a Dist::Zilla plugin bundle
+# ABSTRACT: 
 # PODNAME:
 
 =head1 SYNOPSIS
