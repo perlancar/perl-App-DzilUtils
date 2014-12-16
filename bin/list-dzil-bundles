@@ -30,7 +30,7 @@ Perinci::CmdLine::Any->new(
 )->run;
 
 # ABSTRACT: List installed Dist::Zilla plugin bundles
-# PODNAME: list-dzil-bundles
+# PODNAME:
 
 =head1 SYNOPSIS
 
