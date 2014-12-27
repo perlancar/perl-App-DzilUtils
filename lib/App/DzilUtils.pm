@@ -13,30 +13,28 @@ our $_complete_stuff = sub {
     my %args = @_;
 
     my $word = $args{word} // '';
+    my $sep = $word =~ /::/ ? '::' : '/';
+    $word =~ s/\Q$sep\E/::/g;
 
     # convenience: allow Foo/Bar.{pm,pod,pmc}
     $word =~ s/\.(pm|pmc|pod)\z//;
 
-    # compromise, if word doesn't contain :: we use the safer separator /, but
-    # if already contains '::' we use '::' (but this means in bash user needs to
-    # use quote (' or ") to make completion behave as expected since : is a word
-    # break character in bash/readline.
-    my $sep = $word =~ /::/ ? '::' : '/';
-    $word =~ s/\W+/::/g;
     my $ns_prefix    = 'Dist::Zilla::'.
         ($which eq 'bundle' ? 'PluginBundle' :
              $which eq 'plugin' ? 'Plugin' :
                  $which eq 'role' ? 'Role' : '').'::';
 
+    my $compres = Complete::Module::complete_module(
+        word      => $word,
+        ns_prefix => $ns_prefix,
+        find_pmc  => 0,
+        find_pod  => 0,
+    );
+
+    for (@$compres) { s/::/$sep/g }
+
     {
-        words => Complete::Module::complete_module(
-            word      => $word,
-            ns_prefix => $ns_prefix,
-            find_pmc  => 0,
-            find_pod  => 0,
-            separator => $sep,
-            ci        => 1, # convenience
-        ),
+        words => $compres,
         path_sep => $sep,
     };
 };
