@@ -1,5 +1,12 @@
 Revision history for App-DzilUtils
 
+0.05    2014-12-28 (PERLANCAR)
+
+	- No functional changes.
+
+	- Extract completion routine to separate dist Complete-Dist-Zilla.
+
+
 0.04    2014-12-27 (PERLANCAR)
 
 	- Adjust to Complete::Module 0.06+.
