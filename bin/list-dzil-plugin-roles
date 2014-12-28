@@ -7,7 +7,6 @@ use 5.010;
 use strict;
 use warnings;
 
-use App::DzilUtils;
 use Perinci::CmdLine::Any -prefer_lite=>1;
 
 our %SPEC;
@@ -19,7 +18,11 @@ $SPEC{list_dzil_plugin_roles} = {
             schema => 'str*',
             req    => 1,
             pos    => 0,
-            completion => $App::DzilUtils::_complete_plugin,
+            completion => sub {
+                require Complete::Dist::Zilla;
+                my %args = @_;
+                Complete::Dist::Zilla::complete_dzil_plugin(word=>$args{word});
+            },
         },
     },
 };
@@ -55,7 +58,7 @@ Perinci::CmdLine::Any->new(
     url => '/main/list_dzil_plugin_roles',
 )->run;
 
-# ABSTRACT: 
+# ABSTRACT:
 # PODNAME:
 
 =head1 SYNOPSIS

@@ -7,7 +7,6 @@ use 5.010;
 use strict;
 use warnings;
 
-#use App::DzilUtils;
 use Perinci::CmdLine::Any -prefer_lite=>1;
 
 our %SPEC;
@@ -29,7 +28,7 @@ Perinci::CmdLine::Any->new(
     url => '/main/list_dzil_bundles',
 )->run;
 
-# ABSTRACT: 
+# ABSTRACT:
 # PODNAME:
 
 =head1 SYNOPSIS

@@ -7,7 +7,6 @@ use 5.010;
 use strict;
 use warnings;
 
-use App::DzilUtils;
 use Perinci::CmdLine::Any -prefer_lite=>1;
 
 our %SPEC;
@@ -19,7 +18,11 @@ $SPEC{list_dzil_bundle_contents} = {
             schema => 'str*',
             req    => 1,
             pos    => 0,
-            completion => $App::DzilUtils::_complete_bundle,
+            completion => sub {
+                require Complete::Dist::Zilla;
+                my %args = @_;
+                Complete::Dist::Zilla::complete_dzil_bundle(word=>$args{word});
+            },
         },
         short => {
             schema => 'bool*',
@@ -60,7 +63,7 @@ Perinci::CmdLine::Any->new(
     url => '/main/list_dzil_bundle_contents',
 )->run;
 
-# ABSTRACT: 
+# ABSTRACT:
 # PODNAME:
 
 =head1 SYNOPSIS
