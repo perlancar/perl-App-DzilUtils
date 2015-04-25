@@ -1,0 +1,92 @@
+#!perl
+
+# DATE
+# VERSION
+
+use 5.010;
+use strict;
+use warnings;
+
+use Perinci::CmdLine::Any;
+
+die "App::lcpan required, please install it first\n"
+    unless eval { require App::lcpan; 1 };
+
+no warnings 'once';
+
+our %SPEC;
+$SPEC{list_dist_deps} = {
+    v => 1.1,
+    summary => 'List dependencies from dist.ini',
+    description => <<'_',
+
+Check the Prereqs/* sections in your `dist.ini` and list them. There is an
+option to do recursive CPAN dependencies by using `lcpan`.
+
+AutoPrereqs is not supported.
+
+_
+    args => {
+        %App::lcpan::deps_args,
+    },
+};
+sub list_dist_deps {
+    require Config::IOD::Reader;
+
+    my %args = @_;
+
+    my $reader = Config::IOD::Reader->new(
+        ignore_unknown_directive => 1,
+    );
+    my $dist_ini = $reader->read_file('dist.ini');
+
+    my @res;
+    for my $sectname (keys %$dist_ini) {
+        next unless $sectname =~ m!^Prereqs(?:\s*/\s*
+                                       (develop|configure|build|runtime|test)
+                                       (requires|recommends|suggests|conflicts))?$!ix;
+        my $phase = lc($1 // 'runtime');
+        my $rel   = lc($2 // 'requires');
+        next if $args{phase} ne 'ALL' && $phase ne $args{phase};
+        next if $args{rel} ne 'ALL' && $rel ne $args{rel};
+        my $sect = $dist_ini->{$sectname};
+        for my $mod (keys %$sect) {
+            next if $mod eq 'perl';
+            push @res, {module=>$mod, phase=>$phase, rel=>$rel, version=>$sect->{$mod}};
+        }
+    }
+
+    if ($args{level}) {
+        require IPC::System::Options;
+        require JSON;
+        my $res = IPC::System::Options::backtick(
+            {die=>1, log=>1},
+            "lcpan", "deps",
+            "--phase", $args{phase},
+            "--rel", $args{rel},
+            "--level", $args{level},
+            ("--include-core") x !!($args{include_core}),
+            ("--no-include-core") x !!(!$args{include_core}),
+            "--perl-version", $args{perl_version},
+            "--json", "--no-naked-res",
+            map {$_->{module}} @res,
+        );
+        JSON->new->decode($res);
+    } else {
+        [200,"OK",\@res];
+    }
+}
+
+Perinci::CmdLine::Any->new(
+    url => '/main/list_dist_deps',
+)->run;
+
+# ABSTRACT:
+# PODNAME:
+
+=head1 SYNOPSIS
+
+ % list-dist-deps
+ % list-dist-deps --phase ALL --rel ALL -R
+
+=cut
