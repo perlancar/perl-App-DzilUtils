@@ -5,6 +5,10 @@ package App::DzilUtils;
 
 use 5.010001;
 
+our %Common_CLI_Attrs = (
+    config_filename => ['dzilutils.ini'],
+);
+
 1;
 # ABSTRACT: Collection of CLI utilities for Dist::Zilla
 

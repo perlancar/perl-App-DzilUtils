@@ -7,6 +7,7 @@ use 5.010;
 use strict;
 use warnings;
 
+use App::DzilUtils;
 use Perinci::CmdLine::Any;
 
 our %SPEC;
@@ -61,6 +62,7 @@ sub list_dzil_bundle_contents {
 
 Perinci::CmdLine::Any->new(
     url => '/main/list_dzil_bundle_contents',
+    %App::DzilUtils::Common_CLI_Attrs,
 )->run;
 
 # ABSTRACT:

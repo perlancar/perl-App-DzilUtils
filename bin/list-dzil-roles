@@ -7,6 +7,7 @@ use 5.010;
 use strict;
 use warnings;
 
+use App::DzilUtils;
 use Perinci::CmdLine::Any;
 
 our %SPEC;
@@ -26,6 +27,7 @@ sub list_dzil_roles {
 
 Perinci::CmdLine::Any->new(
     url => '/main/list_dzil_roles',
+    %App::DzilUtils::Common_CLI_Attrs,
 )->run;
 
 # ABSTRACT:
