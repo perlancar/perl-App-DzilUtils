@@ -1,5 +1,12 @@
 Revision history for App-DzilUtils
 
+0.11    2016-03-10 (PERLANCAR)
+
+	- Replace JSON with JSON::MaybeXS.
+
+	- Make all CLI use dzilutils.ini.
+
+
 0.10    2016-01-18 (PERLANCAR)
 
         - No functional changes.
