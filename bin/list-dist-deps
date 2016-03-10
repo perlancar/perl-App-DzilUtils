@@ -59,7 +59,7 @@ sub list_dist_deps {
 
     if ($args{level}) {
         require IPC::System::Options;
-        require JSON;
+        require JSON::MaybeXS;
         my $res = IPC::System::Options::backtick(
             {die=>1, log=>1},
             "lcpan", "deps",
@@ -72,7 +72,7 @@ sub list_dist_deps {
             "--json", "--no-naked-res",
             map {$_->{module}} @res,
         );
-        JSON->new->decode($res);
+        JSON::MaybeXS->new->decode($res);
     } else {
         [200,"OK",\@res];
     }
