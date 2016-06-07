@@ -60,7 +60,7 @@ sub list_dist_deps {
     if ($args{level}) {
         require IPC::System::Options;
         require JSON::MaybeXS;
-        my $res = IPC::System::Options::backtick(
+        my $res = IPC::System::Options::readpipe(
             {die=>1, log=>1},
             "lcpan", "deps",
             "--phase", $args{phase},
